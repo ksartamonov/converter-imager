@@ -1,0 +1,62 @@
+version: "3.1"
+services:
+  rss-converter:
+    container_name: converter-container
+    image: rss-converter
+    restart: always
+    build: rss-converter
+    depends_on:
+      - postgresdb
+    ports:
+      - 8082:8082
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgrtesdb:5435/items
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      RABBITMQ_ERLANG_COOKIE: "secret cookie"
+
+  rss-imager:
+    container_name: imager-container
+    image: rss-imager
+    restart: always
+    build: rss-imager
+    depends_on:
+      - postgresdb
+    ports:
+      - 8083:8083
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgrtesdb:5435/items
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      RABBITMQ_ERLANG_COOKIE: "secret cookie"
+
+  postgresdb:
+    container_name: itemsdb
+    image: postgres
+    ports:
+      - 5435:5435
+    expose:
+      - 5435
+    environment:
+      POSTGRES_DB: items
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  rabbitmq:
+    container_name: rabbit
+    image: rabbitmq:3.9-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "secret cookie"
+      RABBITMQ_DEFAULT_USERNAME: guest
+      RABBITMQ_DEFAULT_PASSWORD: guest
