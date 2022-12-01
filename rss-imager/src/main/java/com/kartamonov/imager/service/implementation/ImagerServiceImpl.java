@@ -6,20 +6,26 @@ import com.kartamonov.data.model.ItemEntity;
 import com.kartamonov.imager.service.ImagerService;
 import com.kartamonov.imager.service.exceptions.ItemNotFoundException;
 import com.kartamonov.imager.store.repositories.ItemRepository;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Service
 public class ImagerServiceImpl implements ImagerService {
     private ItemRepository itemRepository;
 
+    @Autowired
+    public ImagerServiceImpl(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
+
+    @Transactional
     @Override
     public AckDto save(List<ItemEntity> items) {
         itemRepository.saveAll(items);

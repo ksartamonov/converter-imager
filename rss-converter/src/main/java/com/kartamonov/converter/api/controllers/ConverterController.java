@@ -1,5 +1,6 @@
 package com.kartamonov.converter.api.controllers;
 
+import com.kartamonov.data.dto.AckDto;
 import com.kartamonov.data.dto.ItemsListDto;
 import com.kartamonov.converter.service.ConverterService;
 import com.apptasticsoftware.rssreader.Item;
@@ -14,10 +15,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@Transactional
 @RequestMapping("/converter-imager-api/converter")
 public class ConverterController {
-//    public static final String GET_NEWS = "/api/news/{rss_source}";
     List<Item> news;
     private final ConverterService converterService;
 
@@ -44,12 +43,12 @@ public class ConverterController {
 //    }
 
     @PostMapping(SAVE_ITEMS)
-    public ResponseEntity<ItemsListDto> saveItems(
+    public ResponseEntity<AckDto> saveItems(
             @RequestParam(value = "source", required = true) Optional<String> source) {
         try {
             List<ItemEntity> items = converterService.readNews(source.orElse(null));
-            ItemsListDto itemsListDto = converterService.convertAndSendNews(source.orElse(null), items);
-            return ResponseEntity.ok(itemsListDto);
+            AckDto ackDto = converterService.convertAndSendNews(source.orElse(null), items);
+            return ResponseEntity.ok(ackDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

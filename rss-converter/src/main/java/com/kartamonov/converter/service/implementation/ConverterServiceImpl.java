@@ -1,6 +1,7 @@
 package com.kartamonov.converter.service.implementation;
 
 import com.kartamonov.data.constants.RabbitConstants;
+import com.kartamonov.data.dto.AckDto;
 import com.kartamonov.data.dto.ItemsListDto;
 import com.kartamonov.converter.service.exceptions.BadSourceException;
 import com.kartamonov.data.factories.AuthorDtoFactory;
@@ -44,14 +45,16 @@ public class ConverterServiceImpl implements ConverterService {
         } catch (IOException e) {
             throw new BadSourceException("Incorrect RSS source");
         }
-        List <Item> items = rssFeed.collect(Collectors.toList());
-        return createEntityListFromItemList(rssFeed.collect(Collectors.toList()));
+//        List <Item> items = rssFeed.collect(Collectors.toList());
+        List <ItemEntity> items = createEntityListFromItemList(rssFeed.collect(Collectors.toList()));
+        return items;
+//        return createEntityListFromItemList(rssFeed.collect(Collectors.toList()));
 //        return rssFeed.collect(Collectors.toList());
     }
 
     @Override
-    public ItemsListDto convertAndSendNews(String source, List<ItemEntity> items) {
-        return (ItemsListDto) rabbitTemplate.
+    public AckDto convertAndSendNews(String source, List<ItemEntity> items) {
+        return (AckDto) rabbitTemplate.
                 convertSendAndReceive(
                         directExchange.getName(), RabbitConstants.QueuesNames.SAVE_ITEMS,
                         ItemsListDtoFactory.makeItemsListDto(items));
