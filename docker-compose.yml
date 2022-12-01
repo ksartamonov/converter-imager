@@ -8,9 +8,9 @@ services:
     depends_on:
       - postgresdb
     ports:
-      - 8082:8082
+      - 8082:8080
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgrtesdb:5435/items
+      SPRING_DATASOURCE_URL: jdbc:postgresql://itemsdb:5432/items
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_RABBITMQ_HOST: rabbitmq
@@ -27,9 +27,9 @@ services:
     depends_on:
       - postgresdb
     ports:
-      - 8083:8083
+      - 8083:8080
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgrtesdb:5435/items
+      SPRING_DATASOURCE_URL: jdbc:postgresql://itemsdb:5432/items
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_RABBITMQ_HOST: rabbitmq
@@ -42,9 +42,7 @@ services:
     container_name: itemsdb
     image: postgres
     ports:
-      - 5435:5435
-    expose:
-      - 5435
+      - 5435:5432
     environment:
       POSTGRES_DB: items
       POSTGRES_USER: postgres
