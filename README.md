@@ -64,7 +64,3 @@ http://localhost:8082/converter-imager-api/converter/get_by_id/616b58b1-55c7-4a9
 The response:
 <img width="1016" alt="Снимок экрана 2022-12-02 в 09 26 15" src="https://user-images.githubusercontent.com/65600049/205229296-efbfa249-c5bd-46b5-93b0-6fa2f4ccf34b.png">
 
-## 3. To do:
-* JUnit tests
-* UI
-* JavaDoc
